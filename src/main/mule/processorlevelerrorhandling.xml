@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="2d22c8b9-424c-4350-bbc6-ee529d8c6b3d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="processorlevelerrorhandlingFlow" doc:id="69f47e9f-fb1a-4489-af24-17d436c12461" >
+		<http:listener doc:name="Listener" doc:id="7f8ab23d-ffed-4fef-b89d-7179d46bc50d" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="531559c9-3c56-46ad-8a01-7d9299057544" />
+		<try doc:name="Try" doc:id="051c1649-0ca4-4e8d-b9ef-248d28b7c8f7" >
+			<validation:is-null doc:id="a1466494-8864-4aa2-a6ba-6de5ca5ad16f" value="#[payload]" />
+			<logger level="INFO" doc:name="Logger" doc:id="8bf75155-14dc-4c9a-96d2-4c36b14f39e8" />
+			<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e1bd2d12-1832-43e7-b1ce-b9c9dd0b0bbe" >
+					<logger level="INFO" doc:name="Logger" doc:id="74dfd40b-4756-4f8e-aaaa-93958be0cab6" />
+					<logger level="INFO" doc:name="Logger" doc:id="3889c8c3-f28a-4a4e-9d60-37766cacb93a" />
+					<set-payload value="i m on error propagate" doc:name="Set Payload" doc:id="cc658b67-f3c3-4873-915d-ae02b9de4206" />
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="Logger" doc:id="d36e6bba-2e3c-4637-86a8-0e3ebdd2d9fb" />
+	</flow>
+</mule>
